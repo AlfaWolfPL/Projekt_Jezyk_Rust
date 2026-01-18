@@ -206,8 +206,8 @@ fn moves(board: &mut [[Board;8];8], who_is:usize) {
 }
 fn switch_player(who_is:usize)->usize{
     match who_is {
-        1=>return 0,
-        0=> return 1,
+        1=>0,
+        0=>1,
         _ => panic!(),
     }
 }
