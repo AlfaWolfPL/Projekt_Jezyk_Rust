@@ -28,7 +28,9 @@ pub(crate) fn move_pawn(board: &mut [[Board; 8]; 8], piece: Piece, row: usize, c
     };
     if is_valid_pawn_move(board, &piece, row, col, row_dest, col_dest) {
         // Wykonanie ruchu
-        board[row_dest][col_dest].piece = Some(piece);
+        let mut moved_piece = board[row][col].piece.take().unwrap();
+        moved_piece.is_moved = true;
+        board[row_dest][col_dest].piece = Some(moved_piece);
         board[row][col].piece = None;
         println!("Ruch wykonany!");
     } else {

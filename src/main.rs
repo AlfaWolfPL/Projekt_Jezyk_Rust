@@ -4,11 +4,11 @@ mod bishop_logic;
 mod rook_logic;
 mod queen_logic;
 mod king_logic;
+mod move_piece;
 
 use phf::phf_map;
 use std::io;
-use crate::pawn_logic::move_pawn;
-
+use clearscreen;
 static INDEX_ROW: phf::Map<&'static str,usize>=phf_map! {
     "a"=>0,
     "A"=>0,
@@ -138,27 +138,6 @@ impl Board {
     }
 }
 
-fn move_piece(board: &mut [[Board;8];8], row: usize, col: usize, whois:usize){
-    let color=match whois{
-        0 => Color::White,
-        1 => Color::Black,
-        _ => panic!()
-    };
-    let Some(piece) = board[row][col].piece else { todo!() };
-    if piece.color == color {
-        match piece.piece_type {
-            PieceType::Pawn => { pawn_logic::move_pawn(board, piece, row, col)}
-            PieceType::Knight => {}
-            PieceType::Bishop => {}
-            PieceType::Rook => {}
-            PieceType::Queen => {}
-            PieceType::King => {}
-        }
-
-
-    }
-}
-
 fn main() {
     let mut board: [[Board;8];8] =[[Board { piece: None, row: 0, col: 0, }; 8]; 8];
     for row in 0..8 {
@@ -166,6 +145,7 @@ fn main() {
             board[row][col]=Board::new(row, col);
         }
     }
+    let mut who_is:usize = 0;
     let mut start = true;
     while start {
         for row in (0..8).rev() {  // Odwróć, aby wyświetlić od góry (rząd 7) do dołu (rząd 0)
@@ -174,19 +154,31 @@ fn main() {
             }
             println!(); // nowa linia po każdym rzędzie
         }
+        println!("Menu:");
+        let color=match who_is{
+            0 => "Biały",
+            1 => "Czarny",
+            _ => panic!()
+        };
+        println!("Ruch wykonuje: {}", color );
+        println!("1. Wykonaj ruch");
+        println!("0. zakończ grę");
+        println!("Wybierz:");
 
         let mut option = String::new();
         io::stdin().read_line(&mut option).expect("Błąd odczytu");
         let dig_opt: i32 = option.trim().parse().expect("błąd");
         match dig_opt {
             0 => start = exit_menu(),
-            1 => moves(&mut board),
-            _ => println!("Blond"),
+            1 => moves(&mut board,who_is),
+            _ => continue,
         }
+        who_is=switch_player(who_is);
+        clearscreen::clear().unwrap();
     }
 }
 
-fn moves(board: &mut [[Board;8];8]) {
+fn moves(board: &mut [[Board;8];8], who_is:usize) {
     println!("Podaj index bierki:");
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Błąd odczytu");
@@ -206,9 +198,18 @@ fn moves(board: &mut [[Board;8];8]) {
             return;
         }
     };
-    let who_is:usize=0;
 
-    move_piece(board, row_dest, col_dest, who_is);
+
+    move_piece::move_piece(board, row_dest, col_dest, who_is);
+
+
+}
+fn switch_player(who_is:usize)->usize{
+    match who_is {
+        1=>return 0,
+        0=> return 1,
+        _ => panic!(),
+    }
 }
 
 fn exit_menu() ->bool {
