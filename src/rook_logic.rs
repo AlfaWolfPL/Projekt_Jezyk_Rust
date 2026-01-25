@@ -1,4 +1,4 @@
-use crate::{Board, Piece, Color, INDEX_ROW};
+use crate::{Board, Piece, INDEX_ROW};
 use std::io;
 
 pub(crate) fn move_rook(board: &mut [[Board; 8]; 8], piece: Piece, row: usize, col: usize) {
@@ -18,7 +18,7 @@ pub(crate) fn move_rook(board: &mut [[Board; 8]; 8], piece: Piece, row: usize, c
     let col_dest = *INDEX_ROW.get(col_str).expect("Nieprawidłowa kolumna! Użyj A-H");
 
     let row_dest = match row_char.to_digit(10) {
-        Some(num) if num >= 1 && num <= 8 => (num - 1) as usize,
+        Some(num) if (1..=8).contains(&num) => (num - 1) as usize,
         _ => {
             println!("Nieprawidłowy wiersz! Użyj 1-8");
             return;
@@ -54,10 +54,9 @@ fn is_valid_rook_move(
     }
 
     // 2. Sprawdź czy docelowe pole jest puste lub zawiera pionek przeciwnika
-    if let Some(target_piece) = &board[to_row][to_col].piece {
-        if target_piece.color == piece.color {
-            return false; // Nie można bić własnych pionków
-        }
+    if let Some(target_piece) = &board[to_row][to_col].piece
+        && target_piece.color == piece.color {
+        return false;
     }
 
     // 3. Sprawdź czy nie ma przeszkód na drodze

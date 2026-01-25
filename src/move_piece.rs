@@ -1,4 +1,4 @@
-use crate::{bishop_logic, knight_logic, pawn_logic, queen_logic, rook_logic, Board, Color, PieceType};
+use crate::{bishop_logic, knight_logic, pawn_logic, queen_logic, rook_logic,king_logic, Board, Color, PieceType};
 
 pub fn move_piece(board: &mut [[Board;8];8], row: usize, col: usize, whois:usize){
     let color=match whois{
@@ -14,7 +14,7 @@ pub fn move_piece(board: &mut [[Board;8];8], row: usize, col: usize, whois:usize
             PieceType::Bishop => {bishop_logic::move_bishop(board, piece, row, col)}
             PieceType::Rook => {rook_logic::move_rook(board, piece, row, col)}
             PieceType::Queen => {queen_logic::move_queen(board, piece, row, col)}
-            PieceType::King => {}
+            PieceType::King => {king_logic::move_king(board, piece, row, col)}
         }
 
 

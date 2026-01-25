@@ -1,4 +1,4 @@
-use crate::{Board, Piece, Color, INDEX_ROW};
+use crate::{Board, Piece, INDEX_ROW};
 use std::io;
 
 pub(crate) fn move_queen(
@@ -25,7 +25,7 @@ pub(crate) fn move_queen(
         .expect("Nieprawidłowa kolumna! Użyj A-H");
 
     let row_dest = match row_char.to_digit(10) {
-        Some(num) if num >= 1 && num <= 8 => (num - 1) as usize,
+        Some(num) if (1..=8).contains(&num) => (num - 1) as usize,
         _ => {
             // Możesz wypisać błąd
             return;
@@ -52,10 +52,9 @@ fn is_valid_queen_move(
     to_col: usize,
 ) -> bool {
     // --- 1. Jeśli końcowe pole ma własną figurę → NIE wolno wchodzić ---
-    if let Some(target) = &board[to_row][to_col].piece {
-        if target.color == piece.color {
-            return false;
-        }
+    if let Some(target_piece) = &board[to_row][to_col].piece
+        && target_piece.color == piece.color {
+        return false;
     }
 
     let row_diff = (to_row as isize - from_row as isize).abs();

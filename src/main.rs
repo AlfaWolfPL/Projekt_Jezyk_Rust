@@ -8,7 +8,7 @@ mod move_piece;
 
 use phf::phf_map;
 use std::io;
-use clearscreen;
+//use clearscreen;
 static INDEX_ROW: phf::Map<&'static str,usize>=phf_map! {
     "a"=>0,
     "A"=>0,
@@ -28,16 +28,16 @@ static INDEX_ROW: phf::Map<&'static str,usize>=phf_map! {
     "H"=>7,
 };
 
-static ROW_INDEX: phf::Map<usize,&'static str>=phf_map!{
-    0=>"A",
-    1=>"B",
-    2=>"C",
-    3=>"D",
-    4=>"E",
-    5=>"F",
-    6=>"G",
-    7=>"H",
-};
+//static ROW_INDEX: phf::Map<usize,&'static str>=phf_map!{
+//    0=>"A",
+//    1=>"B",
+//    2=>"C",
+//    3=>"D",
+//    4=>"E",
+//    5=>"F",
+//    6=>"G",
+//    7=>"H",
+//};
 
 
 #[derive(Copy,Clone,PartialEq)]
@@ -64,8 +64,8 @@ struct Piece{
 #[derive(Copy,Clone)]
 struct Board{
     piece: Option<Piece>,
-    row: usize,
-    col: usize,
+    //row: usize,
+    //col: usize,
 }
 
 
@@ -75,30 +75,33 @@ impl Board {
 
             match row_n {
                 0 => match col_n {
-                    0|7 => Board{piece: Some(Piece {color: Color::White, piece_type: PieceType::Rook, is_moved: false }), col:col_n, row:row_n},
-                    1|6 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Knight, is_moved: false }), col:col_n, row:row_n},
-                    2|5 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Bishop, is_moved: false }), col:col_n, row:row_n},
-                    3 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Queen, is_moved: false }), col:col_n, row:row_n},
-                    4 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::King, is_moved: false }), col:col_n, row:row_n},
-                    _ => Board { piece: None, col:col_n, row:row_n },
+                    0|7 => Board{piece: Some(Piece {color: Color::White, piece_type: PieceType::Rook, is_moved: false })},
+                    1|6 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Knight, is_moved: false })},
+                    //1|6 =>Board { piece: None },
+                    2|5 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Bishop, is_moved: false })},
+                    //2|5 =>Board { piece: None },
+                    3 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Queen, is_moved: false })},
+                    //3 =>Board { piece: None },
+                    4 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::King, is_moved: false })},
+                    _ => Board { piece: None },
                 }
                 1=> match col_n{
-                    0..=7 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Pawn, is_moved: false }), col:col_n, row:row_n},
-                    _ => Board { piece: None, col:col_n, row:row_n },
+                    0..=7 => Board{piece: Some(Piece { color: Color::White, piece_type: PieceType::Pawn, is_moved: false })},
+                    _ => Board { piece: None },
                 }
                 6 => match col_n{
-                    0..=7 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Pawn, is_moved: false }), col:col_n, row:row_n},
-                    _ => Board { piece: None, col:col_n, row:row_n },
+                    0..=7 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Pawn, is_moved: false })},
+                    _ => Board { piece: None },
                 }
                 7 => match col_n{
-                    0|7 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Rook, is_moved: false }), col:col_n, row:row_n},
-                    1|6 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Knight, is_moved: false }), col:col_n, row:row_n},
-                    2|5 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Bishop, is_moved: false }), col:col_n, row:row_n},
-                    3 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Queen, is_moved: false }), col:col_n, row:row_n},
-                    4 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::King, is_moved: false }), col:col_n, row:row_n},
-                    _ => Board { piece: None, col:col_n, row:row_n },
+                    0|7 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Rook, is_moved: false })},
+                    1|6 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Knight, is_moved: false })},
+                    2|5 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Bishop, is_moved: false })},
+                    3 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::Queen, is_moved: false })},
+                    4 => Board{piece: Some(Piece { color: Color::Black, piece_type: PieceType::King, is_moved: false })},
+                    _ => Board { piece: None },
                 },
-                _ => Board { piece: None, col:col_n, row:row_n },
+                _ => Board { piece: None },
             }
 
 
@@ -139,10 +142,10 @@ impl Board {
 }
 
 fn main() {
-    let mut board: [[Board;8];8] =[[Board { piece: None, row: 0, col: 0, }; 8]; 8];
-    for row in 0..8 {
-        for col in 0..8 {
-            board[row][col]=Board::new(row, col);
+    let mut board: [[Board;8];8] =[[Board { piece: None, }; 8]; 8];
+    for (row_idx, row_data) in board.iter_mut().enumerate() {
+        for (col_idx, field) in row_data.iter_mut().enumerate() {
+            *field = Board::new(row_idx, col_idx);
         }
     }
     let mut who_is:usize = 0;
@@ -167,13 +170,25 @@ fn main() {
 
         let mut option = String::new();
         io::stdin().read_line(&mut option).expect("Błąd odczytu");
-        let dig_opt: i32 = option.trim().parse().expect("błąd");
+
+        let dig_opt: i32 = match option.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("To nie jest liczba! Spróbuj ponownie.");
+                continue;
+            }
+        };
+
         match dig_opt {
             0 => start = exit_menu(),
-            1 => moves(&mut board,who_is),
-            _ => continue,
+            1 => moves(&mut board, who_is),
+            _ => {
+                println!("Nieznana opcja!");
+                continue;
+            }
         }
-        who_is=switch_player(who_is);
+
+        who_is = switch_player(who_is);
         clearscreen::clear().unwrap();
     }
 }
@@ -192,7 +207,7 @@ fn moves(board: &mut [[Board;8];8], who_is:usize) {
     let col_dest = *INDEX_ROW.get(col_str).expect("Nieprawidłowa kolumna! Użyj A-H");
 
     let row_dest = match row_char.to_digit(10) {
-        Some(num) if num >= 1 && num <= 8 => (num - 1) as usize,
+        Some(num) if (1..=8).contains(&num) => (num - 1) as usize,
         _ => {
             println!("Nieprawidłowy wiersz! Użyj 1-8");
             return;

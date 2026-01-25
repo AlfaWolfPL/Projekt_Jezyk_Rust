@@ -20,7 +20,7 @@ pub(crate) fn move_pawn(board: &mut [[Board; 8]; 8], piece: Piece, row: usize, c
     let col_dest = *INDEX_ROW.get(col_str).expect("Nieprawidłowa kolumna! Użyj A-H");
 
     let row_dest = match row_char.to_digit(10) {
-        Some(num) if num >= 1 && num <= 8 => (num - 1) as usize,
+        Some(num) if (1..=8).contains(&num) => (num - 1) as usize,
         _ => {
             println!("Nieprawidłowy wiersz! Użyj 1-8");
             return;

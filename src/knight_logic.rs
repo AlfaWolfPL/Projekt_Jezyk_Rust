@@ -1,5 +1,5 @@
 use std::io;
-use crate::{Board, Color, Piece, INDEX_ROW};
+use crate::{Board, Piece, INDEX_ROW};
 
 pub(crate) fn move_knight(board: &mut [[Board; 8]; 8], piece: Piece, row: usize, col: usize) {
     // Info pomocnicze
@@ -60,10 +60,9 @@ fn is_valid_knight_move(
     }
 
     // Sprawdzamy, czy na polu docelowym nie stoi figura tego samego koloru
-    if let Some(target_piece) = &board[to_row][to_col].piece {
-        if target_piece.color == piece.color {
-            return false;
-        }
+    if let Some(target_piece) = &board[to_row][to_col].piece
+    && target_piece.color == piece.color {
+        return false; 
     }
 
     true
